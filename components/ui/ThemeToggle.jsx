@@ -1,13 +1,28 @@
 "use client";
 
-import { Moon, Sun, Monitor } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-1 rounded-full border border-border bg-card p-0">
+        <div className="h-9 w-9" />
+        <div className="h-9 w-9" />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-border bg-card p-1">
+    <div className="flex items-center gap-1 rounded-full border border-border bg-card p-0">
       <button
         onClick={() => setTheme("light")}
         className={`rounded-full p-2 transition ${
@@ -17,7 +32,7 @@ export default function ThemeToggle() {
         }`}
         aria-label="Light mode"
       >
-        <Sun size={16} />
+        <Sun className="h-4 w-4" />
       </button>
 
       <button
@@ -29,19 +44,7 @@ export default function ThemeToggle() {
         }`}
         aria-label="Dark mode"
       >
-        <Moon size={16} />
-      </button>
-
-      <button
-        onClick={() => setTheme("system")}
-        className={`rounded-full p-2 transition ${
-          theme === "system"
-            ? "bg-primary text-primary-foreground"
-            : "text-muted-foreground hover:text-foreground"
-        }`}
-        aria-label="System theme"
-      >
-        <Monitor size={16} />
+        <Moon className="h-4 w-4" />
       </button>
     </div>
   );
