@@ -10,7 +10,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b border-border bg-background">
+    <header className="border-b border-border bg-background fixed top-0 left-0 right-0 z-50 p-1">
       {/* Main Header */}
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         
@@ -45,6 +45,12 @@ export default function Header() {
             className="rounded-md p-1 hover:bg-muted"
           >
             Account
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-md p-1  bg-secondary text-white hover:bg-secondary/90"
+          >
+            Get Started
           </Link>
         </nav>
 
@@ -132,6 +138,13 @@ export default function Header() {
               onClick={() => setOpen(false)}
             >
               Wishlist
+            </Link>
+            <Link
+              href="/login"
+              className="rounded-md p-2 hover:bg-muted"
+              onClick={() => setOpen(false)}
+            >
+              Get Started
             </Link>
 
           </div>

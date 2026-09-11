@@ -2,6 +2,12 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+*{
+  /* padding:0; */
+  margin:0;
+  box-sizing:border-box;
+}
+
 :root {
   /* Light mode */
 
