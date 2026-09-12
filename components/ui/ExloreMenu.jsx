@@ -19,20 +19,20 @@ export default function ExploreMenu() {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Categories */}
+      {/* Categories sort */}
+      <div className="flex flex-col items-start gap-2 p-3">
+        
       <CategoryFilter
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
-      />
-
-      {/* Sort */}
-      <div className="flex justify-end">
-        <SortFilter
+        />
+       <SortFilter
           sort={sort}
           onSortChange={setSort}
-        />
-      </div>
+          />
+        </div>
 
+      
       {/* Products */}
       <Menu
         searchValue={search}
