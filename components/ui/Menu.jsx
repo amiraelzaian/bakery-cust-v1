@@ -1,17 +1,23 @@
-
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "./ProductCard";
+
+const SORT_MAP = {
+  newest: "-createdAt",
+  oldest: "createdAt",
+  "name-asc": "name",
+  "a-z": "name",
+  "name-desc": "-name",
+  "z-a": "-name",
+};
 
 export default function Menu({
   categoryValue,
   sortValue,
   searchValue,
 }) {
-  const { products = [], isLoading, isError } = useProducts();
-
   // -----------------------------
   // Debounced search
   // -----------------------------
@@ -27,16 +33,60 @@ export default function Menu({
     return () => clearTimeout(timer);
   }, [searchValue]);
 
+  // Price isn't a fixed DB field (product.price OR sizes[].price),
+  // so price sort is applied client-side on loaded pages only.
+  const isPriceSort =
+    sortValue === "price-low" ||
+    sortValue === "price-asc" ||
+    sortValue === "price-high" ||
+    sortValue === "price-desc";
+
+  const {
+    products = [],
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts({
+    categoryId: categoryValue,
+    keyword: debouncedSearch,
+    sort: isPriceSort ? undefined : SORT_MAP[sortValue],
+  });
+
+  // -----------------------------
+  // Infinite scroll sentinel (now works for every category, not just "all")
+  // -----------------------------
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasNextPage) return;
+
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   // -----------------------------
   // Get product starting price
   // -----------------------------
   const getProductPrice = (product) => {
-    // Product has a direct price
     if (product.price != null) {
       return Number(product.price);
     }
 
-    // Product has sizes
     if (product.sizes?.length) {
       const prices = product.sizes
         .map((size) => Number(size.price))
@@ -47,115 +97,25 @@ export default function Menu({
       }
     }
 
-    // No price
     return 0;
   };
 
   // -----------------------------
-  // Filter + Search + Sort
+  // Client-side price sort only (over currently loaded pages)
   // -----------------------------
-  const filteredProducts = useMemo(() => {
-    let result = [...products];
+  const sortedProducts = useMemo(() => {
+    if (!isPriceSort) return products;
 
-    // -----------------------------
-    // Category
-    // -----------------------------
-    if (
-      categoryValue &&
-      categoryValue.toLowerCase() !== "all"
-    ) {
-      result = result.filter((product) => {
-        const categoryName =
-          product.categoryId?.name?.toLowerCase() || "";
+    const result = [...products];
 
-        return categoryName === categoryValue.toLowerCase();
-      });
-    }
-
-    // -----------------------------
-    // Search
-    // -----------------------------
-    const search = debouncedSearch.trim().toLowerCase();
-
-    if (search) {
-      result = result.filter((product) => {
-        const name = product.name?.toLowerCase() || "";
-
-        const description =
-          product.description?.toLowerCase() || "";
-
-        const category =
-          product.categoryId?.name?.toLowerCase() || "";
-
-        return (
-          name.includes(search) ||
-          description.includes(search) ||
-          category.includes(search)
-        );
-      });
-    }
-
-    // -----------------------------
-    // Sort
-    // -----------------------------
-    switch (sortValue) {
-      case "price-low":
-      case "price-asc":
-        result.sort(
-          (a, b) =>
-            getProductPrice(a) - getProductPrice(b)
-        );
-        break;
-
-      case "price-high":
-      case "price-desc":
-        result.sort(
-          (a, b) =>
-            getProductPrice(b) - getProductPrice(a)
-        );
-        break;
-
-      case "name-asc":
-      case "a-z":
-        result.sort((a, b) =>
-          (a.name || "").localeCompare(b.name || "")
-        );
-        break;
-
-      case "name-desc":
-      case "z-a":
-        result.sort((a, b) =>
-          (b.name || "").localeCompare(a.name || "")
-        );
-        break;
-
-      case "newest":
-        result.sort(
-          (a, b) =>
-            new Date(b.createdAt || 0).getTime() -
-            new Date(a.createdAt || 0).getTime()
-        );
-        break;
-
-      case "oldest":
-        result.sort(
-          (a, b) =>
-            new Date(a.createdAt || 0).getTime() -
-            new Date(b.createdAt || 0).getTime()
-        );
-        break;
-
-      default:
-        break;
-    }
+    result.sort((a, b) =>
+      sortValue === "price-low" || sortValue === "price-asc"
+        ? getProductPrice(a) - getProductPrice(b)
+        : getProductPrice(b) - getProductPrice(a)
+    );
 
     return result;
-  }, [
-    products,
-    categoryValue,
-    debouncedSearch,
-    sortValue,
-  ]);
+  }, [products, isPriceSort, sortValue]);
 
   // -----------------------------
   // Loading
@@ -184,13 +144,13 @@ export default function Menu({
   // -----------------------------
   return (
     <section>
-      {filteredProducts.length === 0 ? (
+      {sortedProducts.length === 0 ? (
         <div className="py-10 text-center text-gray-500">
           No products found.
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {filteredProducts.map((product) => (
+          {sortedProducts.map((product) => (
             <ProductCard
               key={product._id}
               product={product}
@@ -198,6 +158,14 @@ export default function Menu({
           ))}
         </div>
       )}
+
+      <div ref={sentinelRef} className="h-10 w-full">
+        {isFetchingNextPage && (
+          <div className="py-6 text-center text-sm text-gray-400">
+            Loading more...
+          </div>
+        )}
+      </div>
     </section>
   );
 }

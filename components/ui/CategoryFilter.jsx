@@ -45,11 +45,11 @@ export default function CategoryFilter({
         {/* API Categories */}
         {categories.map((category) => (
           <button
-            key={category.name}
+            key={category._id}
             type="button"
-            onClick={() => onCategoryChange(category.name)}
+            onClick={() => onCategoryChange(category._id)}
             className={`shrink-0 rounded-full px-6 py-3 text-sm font-semibold transition ${
-              selectedCategory === category.name
+              selectedCategory === category._id
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted hover:bg-primary/10"
             }`}

@@ -1,4 +1,5 @@
 import ExploreMenu from "@/components/ui/ExloreMenu";
+import { Suspense } from "react";
 
 export default function Explore() {
   return (
@@ -16,7 +17,9 @@ export default function Explore() {
         </div>
 
         <div className="mt-8">
-          <ExploreMenu />
+        <Suspense fallback={null}>
+            <ExploreMenu />
+            </Suspense>
         </div>
       </section>
     </main>

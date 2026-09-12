@@ -1,19 +1,29 @@
 'use client';
 
 import { getProducts } from "@/lib/api/products";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
+const LIMIT = 20;
 
+export function useProducts({ categoryId = "all", keyword = "", sort } = {}) {
+  const query = useInfiniteQuery({
+    queryKey: ["products", categoryId, keyword, sort],
+    queryFn: ({ pageParam = 1 }) =>
+      getProducts({ pageParam, limit: LIMIT, categoryId, keyword, sort }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const page = lastPage?.page;
+      if (!page) return undefined;
+      return page.currentPage < page.NoOfPages ? page.next : undefined;
+    },
+  });
 
-export function useProducts(){
-    const query=useQuery({
-        queryKey:["products"],
-        queryFn:getProducts,
-    })
+  const products = (query.data?.pages ?? []).flatMap((page) =>
+    Array.isArray(page?.data) ? page.data : []
+  );
 
-    const products=Array.isArray(query.data)?query.data:Array.isArray(query.data?.data)?query.data.data:[]
   return {
     ...query,
-    products
-  }
+    products,
+  };
 }
