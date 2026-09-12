@@ -48,7 +48,7 @@ export default function ExploreMenu() {
       />
 
       {/* Categories sort */}
-      <div className="flex flex-col items-start gap-2 p-3">
+      <div className="flex flex-col items-start gap-2 p-3 lg:flex-row lg:justify-between">
         <CategoryFilter
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}

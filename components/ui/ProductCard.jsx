@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
-    console.log(product)
   const hasSizes =
     Array.isArray(product.sizes) &&
     product.sizes.length > 0;
