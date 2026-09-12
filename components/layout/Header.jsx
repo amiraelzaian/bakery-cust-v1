@@ -10,9 +10,9 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b border-border bg-background fixed top-0 left-0 right-0 z-50 p-1">
+    <header className="border-b border-border bg-background fixed top-0 left-0 right-0 z-50 p-1 ">
       {/* Main Header */}
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+      <div className="mx-auto flex h-16 items-center justify-between px-4">
         
         {/* Logo */}
         <Logo />

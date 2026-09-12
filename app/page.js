@@ -1,5 +1,5 @@
-"use client";
 
+import CategoriesScroller from "@/components/ui/CategoriesScroller";
 import CategoryCard from "@/components/ui/CategoryCard";
 import ContactItem from "@/components/ui/ContactItem";
 import Feature from "@/components/ui/Feature";
@@ -11,11 +11,32 @@ import {
   MapPin,
   Mail,
   Phone,
-  ShoppingBag,
-  Sparkles,
+ 
   Milk,
 } from "lucide-react";
 import Image from "next/image";
+
+import { Metadata } from "next";
+import CallBtn from "@/components/ui/CallBtn";
+
+export const metadata = {
+  title: "CREME & CRUMB | Freshly Baked With Love",
+  description:
+    "Explore CREME & CRUMB for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
+  openGraph: {
+    title: "CREME & CRUMB | Freshly Baked With Love",
+    description:
+      "Artisan breads, cakes, pastries, and sweet treats freshly baked for you.",
+    images: [
+      {
+        url: "/images/breadcoffe2.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CREME & CRUMB bakery",
+      },
+    ],
+  },
+};
 
 export default function Home() {
   return (
@@ -51,10 +72,10 @@ export default function Home() {
 
         {/* Hero Buttons */}
         <div className="absolute bottom-0 left-0 z-10 flex w-full justify-center p-4 sm:p-6">
-  <div className="grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-3">
+  <div className="grid w-full  grid-cols-1 gap-3 sm:grid-cols-3">
     <MainButton
       path="/cart"
-      className="col-span-2 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-white"
+      className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-white"
     >
       Order Now
       <ArrowRight className="h-5 w-5" />
@@ -62,7 +83,7 @@ export default function Home() {
 
     <MainButton
       path="/explore"
-      className="flex items-center justify-center rounded-xl bg-white py-3 text-primary hover:bg-white/90"
+      className="flex  col-span-1  items-center justify-center rounded-xl bg-white py-3 text-primary hover:bg-white/90"
     >
       Explore Categories
     </MainButton>
@@ -71,60 +92,24 @@ export default function Home() {
       </section>
 
       {/* ================= CATEGORIES ================= */}
-      <section className="px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-                What we bake
-              </p>
+    <section className="w-full overflow-hidden px-4 py-20 sm:px-6 lg:px-8 flex justify-center">
+  <div className="mx-auto flex w-full min-w-0 max-w-7xl flex-col gap-3">
+    <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+          What we bake
+        </p>
 
-              <h2 className="mt-2 text-3xl font-bold sm:text-4xl">
-                Something for every craving
-              </h2>
+        <p className="mt-3 max-w-xl text-muted-foreground">
+          From buttery pastries to beautifully decorated cakes, find
+          something delicious for every occasion.
+        </p>
+      </div>
+    </div>
 
-              <p className="mt-3 max-w-xl text-muted-foreground">
-                From buttery pastries to beautifully decorated cakes, find
-                something delicious for every occasion.
-              </p>
-            </div>
-
-            <MainButton
-              path="/explore"
-              className="flex w-auto items-center gap-2 self-start bg-transparent px-0 text-primary hover:bg-transparent sm:self-auto"
-            >
-              View all
-              <ArrowRight className="h-4 w-4" />
-            </MainButton>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <CategoryCard
-              image="/images/cakes.jpg"
-              title="Cakes"
-              description="Beautiful cakes for every celebration."
-            />
-
-            <CategoryCard
-              image="/images/pastries.jpg"
-              title="Pastries"
-              description="Buttery, flaky and freshly baked every morning."
-            />
-
-            <CategoryCard
-              image="/images/bread.jpg"
-              title="Fresh Bread"
-              description="Warm artisan bread made with care."
-            />
-
-            <CategoryCard
-              image="/images/cookies.jpg"
-              title="Cookies"
-              description="Sweet little treats baked to perfection."
-            />
-          </div>
-        </div>
-      </section>
+    <CategoriesScroller />
+  </div>
+</section>
 
       {/* ================= ABOUT ================= */}
       <section className="bg-card px-4 py-20 sm:px-6 lg:px-8">
@@ -243,23 +228,17 @@ export default function Home() {
                   />
                 </div>
 
-                <MainButton
-                 onClick={() => (window.location.href = "tel:+1234567890")}
-                className="flex justify-center items-center mt-8  w-auto  gap-2 bg-primary px-7 py-3 text-white"
+                {/* <CallBtn/> */}
+                <a
+                href="tel:+201005707613"
+                className="rounded-lg bg-primary px-3 py-2 font-bold text-white w-fit"
               >
                 Call us
-                <ArrowRight className="h-4 w-4" />
-              </MainButton>
+              </a>
               </div>
 
-              {/* Contact Image */}
-              <div
-                className="min-h-[350px] bg-cover bg-center"
-                style={{
-                  backgroundImage: "url('/images/contact-bakery.jpg')",
-                }}
-              />
-            </div>
+             
+             </div>
           </div>
         </div>
       </section>
@@ -279,7 +258,7 @@ export default function Home() {
             Get updates about new treats, seasonal specials and bakery news.
           </p>
 
-          <form className="mx-auto mt-7 flex max-w-lg flex-col gap-3 sm:flex-row " onClick={(e) => e.preventDefault()}>
+          <form className="mx-auto mt-7 flex max-w-lg flex-col gap-3 sm:flex-row " >
             <input
               type="email"
               placeholder="Your email address"

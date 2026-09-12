@@ -2,11 +2,12 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CategoryCard({ image, title, description }) {
+export default function CategoryCard({  title, description ,image='/images/bread2.jpg'}) {
+    
   return (
     <Link
-      href="/categories"
-      className="group overflow-hidden rounded-2xl bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+      href="/explore?"
+      className="group mt-2 overflow-hidden rounded-2xl bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg  "
     >
       <div className="overflow-hidden">
         <Image
@@ -14,7 +15,7 @@ export default function CategoryCard({ image, title, description }) {
           height={300}
           src={image}
           alt={title}
-          className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-56 w-full object-cover rounded-md transition duration-500 group-hover:scale-105"
         />
       </div>
 
