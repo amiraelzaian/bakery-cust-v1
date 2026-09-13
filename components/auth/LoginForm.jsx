@@ -1,105 +1,235 @@
 "use client";
 
+import { useForgotPassword } from "@/hooks/useForgotPassword";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useLogin } from "@/hooks/useLogin";
+import { GoogleLogin } from "@react-oauth/google";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
-const { login:onSubmit, isLoading, error } = useLogin();
+  const {
+    login: onSubmit,
+    isLoading,
+    error,
+  } = useLogin();
 
+  const {
+    loginWithGoogle,
+    error: googleError,
+  } = useGoogleAuth();
+
+  const {
+    forgotPassword,
+    isPending: isSendingCode,
+    error: forgotPasswordError,
+  } = useForgotPassword();
 
   const {
     register,
     handleSubmit,
+    watch,
+    trigger,
     formState: { errors },
   } = useForm({
-    defaultValues: { email: "", password: "" },
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  
+  const email = watch("email");
+
+  const handleForgotPassword = async () => {
+    const isEmailValid = await trigger("email");
+
+    if (!isEmailValid) return;
+
+    forgotPassword({ email });
+  };
+
   return (
-    <div className="w-full max-w-sm mx-auto">
-      <p className="text-xs text-[#B8734A]">Welcome back</p>
-      <h2 className="font-serif text-3xl mt-1 text-[#2A1D14]">Sign in to Maison Farine</h2>
-      <p className="text-sm text-[#8A7A68] mt-2">
-        Access your saved baskets, recurring deliveries, and artisanal orders.
-      </p>
+    <div className="w-full max-w-md">
+      {/* Heading */}
+      <div className="mb-7">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          Welcome back
+        </p>
 
-      <button
-        type="button"
-        className="mt-6 w-full border border-[#E4D9CB] rounded-md py-2.5 text-sm font-medium
-                   flex items-center justify-center gap-2 hover:bg-[#F7F2EA] transition-colors"
-      >
-        Continue with Google
-      </button>
+        <h2 className="font-serif text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+          Sign in to Golden Crumbs
+        </h2>
 
-      <div className="flex items-center gap-3 my-6">
-        <div className="h-px flex-1 bg-[#E4D9CB]" />
-        <span className="text-xs text-[#9C8B78]">or continue with email</span>
-        <div className="h-px flex-1 bg-[#E4D9CB]" />
+        <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
+          Access your saved baskets, recurring deliveries, and artisanal
+          orders.
+        </p>
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2 mb-4">
-          {error}
-        </p>
+      {/* Google */}
+      <div className="overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-sm">
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (credentialResponse.credential) {
+              loginWithGoogle(credentialResponse.credential);
+            }
+          }}
+          onError={() => console.error("Google login failed")}
+          width="100%"
+        />
+      </div>
+
+      {googleError && (
+        <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-600">
+          {googleError}
+        </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      {/* Divider */}
+      <div className="my-7 flex items-center gap-4">
+        <div className="h-px flex-1 bg-border" />
+
+        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+          or continue with email
+        </span>
+
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      {/* Login error */}
+      {error && (
+        <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <span className="mt-0.5">!</span>
+          <p>{error}</p>
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 flex flex-col gap-3"
+        noValidate
+      
+      >
+        {/* Email */}
         <div>
-          <label htmlFor="email" className="text-xs font-medium text-[#6B5D4E]">
+          <label
+            htmlFor="email"
+            className="mb-2 block text-xs font-semibold text-foreground"
+          >
             Email address
           </label>
+
           <input
             id="email"
             type="email"
-            {...register("email", { required: "Email is required" })}
-            className="mt-1 w-full border border-[#E4D9CB] rounded-md px-3 py-2 text-sm
-                       focus:outline-none focus:ring-2 focus:ring-[#D9A15B] focus:border-transparent"
+            placeholder="you@example.com"
+            autoComplete="email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Enter a valid email address",
+              },
+            })}
+            className={`h-12 w-full rounded-xl border bg-input px-4 text-sm text-foreground
+              placeholder:text-muted-foreground/60
+              transition-all duration-200
+              focus:outline-none focus:ring-2 focus:ring-ring/20
+              ${
+                errors.email
+                  ? "border-red-400"
+                  : "border-border focus:border-ring"
+              }`}
           />
+
           {errors.email && (
-            <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>
+            <p className="mt-1.5 text-xs text-red-600">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
+        {/* Password */}
         <div>
-          <div className="flex items-center justify-between">
-            <label htmlFor="password" className="text-xs font-medium text-[#6B5D4E]">
+          <div className="mb-2 flex items-center justify-between">
+            <label
+              htmlFor="password"
+              className="text-xs font-semibold text-foreground"
+            >
               Password
             </label>
-            <a href="/forgot-password" className="text-xs text-[#B8734A] hover:underline">
-              Forgot password?
-            </a>
+
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              disabled={isSendingCode}
+              className="text-xs font-medium text-primary transition-colors hover:text-primary/70 disabled:opacity-50"
+            >
+              {isSendingCode ? "Sending..." : "Forgot password?"}
+            </button>
           </div>
+
           <input
             id="password"
             type="password"
-            {...register("password", { required: "Password is required" })}
-            className="mt-1 w-full border border-[#E4D9CB] rounded-md px-3 py-2 text-sm
-                       focus:outline-none focus:ring-2 focus:ring-[#D9A15B] focus:border-transparent"
+            placeholder="••••••••"
+            autoComplete="current-password"
+            {...register("password", {
+              required: "Password is required",
+            })}
+            className={`h-12 w-full rounded-xl border bg-input px-4 text-sm text-foreground
+              placeholder:text-muted-foreground/50
+              transition-all duration-200
+              focus:outline-none focus:ring-2 focus:ring-ring/20
+              ${
+                errors.password
+                  ? "border-red-400"
+                  : "border-border focus:border-ring"
+              }`}
           />
+
           {errors.password && (
-            <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
+            <p className="mt-1.5 text-xs text-red-600">
+              {errors.password.message}
+            </p>
+          )}
+
+          {forgotPasswordError && (
+            <p className="mt-2 text-xs text-red-600">
+              {forgotPasswordError.message}
+            </p>
           )}
         </div>
 
-       
-
+        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-[#2A1D14] text-[#F4EDE4] rounded-md py-2.5 text-sm font-medium
-                     hover:bg-[#3A2A1C] transition-colors disabled:opacity-50"
+          className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl
+            bg-primary px-5 text-sm font-semibold text-primary-foreground
+            shadow-sm transition-all duration-200
+            hover:-translate-y-0.5 hover:shadow-lg
+            hover:brightness-105
+            disabled:pointer-events-none disabled:opacity-60"
         >
-          {isLoading ? "Signing in..." : "Sign in to account"}
+          <span>
+            {isLoading ? "Signing in..." : "Sign in to account"}
+          </span>
+
+          {!isLoading && (
+            <span className="transition-transform duration-200 group-hover:translate-x-1">
+              →
+            </span>
+          )}
         </button>
       </form>
 
-      <p className="text-center text-sm text-[#8A7A68] mt-6">
-        New customer at Maison Farine?{" "}
+      {/* Register */}
+      <p className="mt-7 text-center text-sm text-muted-foreground">
+        New customer at Golden Crumbs?{" "}
         <Link
           href="/register"
-          className="text-[#B8734A] font-medium hover:underline"
+          className="font-semibold text-primary transition-colors hover:text-primary/80"
         >
           Create an account
         </Link>

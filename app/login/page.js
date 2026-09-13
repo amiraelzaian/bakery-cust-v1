@@ -1,13 +1,18 @@
-import LoginForm from "@/components/auth/LoginForm";
 import BrandPanel from "@/components/auth/BrandPanel";
+import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 bg-[#FBF7F1]">
-      <BrandPanel />
-      <div className="flex items-center justify-center p-6 lg:p-12">
-        <LoginForm />
+    <main className="min-h-screen bg-background">
+      <div className="grid min-h-screen lg:grid-cols-[44%_56%]">
+        <BrandPanel />
+
+        <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:px-12">
+          <div className="w-full max-w-md">
+            <LoginForm />
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
