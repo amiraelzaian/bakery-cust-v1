@@ -4,8 +4,11 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
+const router=useRouter();
+
   const hasSizes =
     Array.isArray(product.sizes) &&
     product.sizes.length > 0;
@@ -21,6 +24,15 @@ export default function ProductCard({ product }) {
   const categoryName =
     product.categoryId?.name || "";
 
+ function handleShowDetails(productId){
+
+    const token=localStorage.getItem("token");
+    if(!token){
+      router.push(`/login?redirect=/explore/${productId}`);
+      return
+    }
+    router.push(`/explore/${productId}`);
+}
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300  hover:shadow-md">
@@ -127,12 +139,12 @@ export default function ProductCard({ product }) {
           </div>
 
            {/*details page*/}
-            <Link href={`explore/${product._id}`}
+            <button onClick={() => handleShowDetails(product._id)}
               
               className="flex justify-center items-center p-2 rounded-full bg-secondary  text-[11px] font-medium text-primary-foreground transition hover:bg-ring cursor-pointer"
             >
                 Show details 
-            </Link>
+            </button>
          
         </div>
       </div>
