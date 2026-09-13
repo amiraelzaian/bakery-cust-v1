@@ -21,6 +21,8 @@ export default function Header() {
   const isActive = (href) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
+   const token=localStorage.getItem("token");
+
   return (
     <header className="border-b border-border bg-background fixed top-0 left-0 right-0 z-50 p-1 ">
       {/* Main Header */}
@@ -43,12 +45,14 @@ export default function Header() {
             </Link>
           ))}
 
-          <Link
-            href="/login"
-            className="rounded-md p-1  bg-secondary text-white hover:bg-secondary/90"
-          >
-            Get Started
-          </Link>
+         { !token && (
+            <Link
+              href="/login"
+              className="rounded-md p-1  bg-secondary text-white hover:bg-secondary/90"
+            >
+              Get Started
+            </Link>
+          )}
         </nav>
 
         {/* Right Side */}
@@ -119,13 +123,14 @@ export default function Header() {
             >
               Wishlist
             </Link>
-            <Link
-              href="/login"
-              className="rounded-md p-2 hover:bg-muted"
-              onClick={() => setOpen(false)}
-            >
-              Get Started
-            </Link>
+               { !token && (
+                    <Link
+                  href="/login"
+                  className="rounded-md p-2 hover:bg-muted"
+                  onClick={() => setOpen(false)}
+                >
+                  Get Started
+            </Link>)}
 
           </div>
         </nav>

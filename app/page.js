@@ -18,6 +18,7 @@ import Image from "next/image";
 
 import { Metadata } from "next";
 import CallBtn from "@/components/ui/CallBtn";
+import Header from "@/components/layout/Header";
 
 export const metadata = {
   title: "CREME & CRUMB | Freshly Baked With Love",
@@ -41,6 +42,7 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="bg-background text-foreground">
+      <Header />
       {/* ================= HERO ================= */}
       <section
         className="relative min-h-[650px] w-full bg-cover bg-center bg-no-repeat"
