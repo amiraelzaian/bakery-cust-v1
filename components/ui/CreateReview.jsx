@@ -20,9 +20,9 @@ export default function CreateReview({ productId }) {
   }
 
   return (
-    <section className="bg-card border border-border rounded-lg p-4 space-y-3">
+    <section className="bg-card border border-border rounded-lg p-4  flex-col gap-3 ">
       <h3 className="font-medium text-foreground">Write a review</h3>
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-2 items-start">
         <StarRating value={rating} onChange={setRating} />
         <textarea
           value={comment}

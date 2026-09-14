@@ -12,7 +12,7 @@ export default function ProductReviews({ productId }) {
   const myReview = reviews?.find((r) => r.user?._id === user?._id)
 
   return (
-    <section className="space-y-6">
+    <section className="flex flex-col gap-4  px-12">
       {/* Only show the create form if the logged-in user has no review yet */}
       {user && !myReview && <CreateReview productId={productId} />}
 

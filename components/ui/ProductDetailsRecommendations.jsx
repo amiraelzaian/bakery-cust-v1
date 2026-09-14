@@ -11,7 +11,7 @@ export default function ProductDetailsRecommentdations(){
     const { productId } = useParams();
       const { product, isPending, error } = useProduct(productId);
 
-      return <section className="">
+      return <section className="flex flex-col gap-5 ">
         <ProductDetails product={product} isPending={isPending} error={error}/>
 
         <ProductReviews productId={productId}/>

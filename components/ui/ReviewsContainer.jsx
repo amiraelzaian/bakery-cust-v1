@@ -15,7 +15,8 @@ export default function ReviewsContainer({ productId }) {
   if (!reviews.length) return <p className="text-sm text-muted-foreground">No reviews yet. Be the first to review this product.</p>
 
   return (
-    <section className="space-y-4">
+    <section className="flex flex-col gap-3">
+        <h3 className="text-secondary">Product Reviews</h3>
       <ul>
         {reviews.map((review) => (
           <ReviewItem

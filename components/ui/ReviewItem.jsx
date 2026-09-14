@@ -68,7 +68,7 @@ export default function ReviewItem({ review, productId, isOwner }) {
   if (isEditing) {
     return (
       <li className="border-b border-border py-4">
-        <form onSubmit={handleSave} className="space-y-3">
+        <form onSubmit={handleSave} className="flex flex-col gap-3 ">
           <StarRating
             value={rating}
             onChange={setRating}
