@@ -3,11 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
+import { useAddToCart } from "@/hooks/useCart";
 
 export default function ProductDetails({product,isPending,error}) {
   
   const [selectedSize, setSelectedSize] = useState(0);
   const [quantity, setQuantity] = useState(1);
+
+  const {addToCart,isPending:addingToCart,isError}=useAddToCart()
 
 // console.log(product)
 
@@ -114,24 +117,29 @@ export default function ProductDetails({product,isPending,error}) {
           </div>
 
           <button
-            disabled={!product.isAvailable || product.stockQuantity === 0}
-            className="cursor-pointer flex-1 bg-primary text-primary-foreground rounded-md py-2.5 text-sm font-medium
-                       hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Add to cart · {displayPrice != null ? `${displayPrice * quantity} EGP` : ""}
-          </button>
+          onClick={() =>
+            addToCart({productId:product._id, size: activeSize?.name, quantity })
+          }
+          disabled={addingToCart || !product.isAvailable || product.stockQuantity === 0}
+          className="flex-1 bg-primary text-primary-foreground rounded-md py-2.5 text-sm font-medium
+                    hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {addingToCart
+            ? "Adding to cart..."
+            : `Add to cart · ${displayPrice != null ? `${displayPrice * quantity} EGP` : ""}`}
+        </button>
         </div>
        
     
-<p className="mt-1 text-xs text-muted-foreground">
-  Updated {product?.updatedAt && new Date(product.updatedAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  })}
-</p>        
+    <p className="mt-1 text-xs text-muted-foreground">
+      Updated {product?.updatedAt && new Date(product.updatedAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })}
+    </p>        
       </div>
     </div>
   );

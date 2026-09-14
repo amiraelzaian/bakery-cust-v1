@@ -3,6 +3,7 @@ import ThemeProvider from "@/components/ui/ThemeProvider";
 import QueryProvider from "@/components/providers/QueryProvider";
 import { Lovers_Quarrel } from "next/font/google";
 import GoogleAuthProvider from "@/components/providers/GoogleProvider";
+import { Toaster } from "sonner";
 
 export const loversQuarrel = Lovers_Quarrel({
   weight: "400",
@@ -18,6 +19,17 @@ export default function RootLayout({ children }) {
 
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+             <Toaster 
+             richColors 
+             position="top-center"  
+             toastOptions={{
+              classNames: {
+                toast:
+                  "bg-card! text-card-foreground! border-border! shadow-lg!",
+                title: "text-foreground!",
+                description: "text-muted-foreground!",
+              },
+          }} />
           </ThemeProvider>
           </GoogleAuthProvider>
         </QueryProvider>
