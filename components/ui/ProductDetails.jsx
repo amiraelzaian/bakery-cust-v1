@@ -9,12 +9,13 @@ export default function ProductDetails({product,isPending,error}) {
   const [selectedSize, setSelectedSize] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-console.log(product)
+// console.log(product)
 
   if (isPending) return <div className="p-12 text-center text-muted-foreground">Loading...</div>;
   if (error) return <div className="p-12 text-center text-primary">Something went wrong: {error.message}</div>;
   if (!product) return null;
 
+  
   const hasSizes = product.sizes && product.sizes.length > 0;
   const activeSize = hasSizes ? product.sizes[selectedSize] : null;
   const displayPrice = hasSizes ? activeSize.price : product.price;
@@ -29,6 +30,7 @@ console.log(product)
           fill
           className="object-cover"
         />
+       {product.hasActiveOffer&& <div className="absolute left-2 top-2 text-xs bg-muted px-2 py-1 rounded-xl ">In Offer</div>}
       </div>
 
       {/* Details */}
