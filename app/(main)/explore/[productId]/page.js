@@ -1,6 +1,8 @@
+import ProductDetailsRecommentdations from "@/components/ui/ProductDetailsRecommendations";
 
 
-export default  function PoductDetails(){
 
-    return <div></div>
+export default  function ProductDetailsPage(){
+
+    return <ProductDetailsRecommentdations/>
 }

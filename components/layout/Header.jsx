@@ -4,7 +4,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import Logo from "../ui/Logo";
 import { Heart, ShoppingCart, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
@@ -21,7 +21,11 @@ export default function Header() {
   const isActive = (href) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
-   const token=localStorage.getItem("token");
+   const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   return (
     <header className="border-b border-border bg-background fixed top-0 left-0 right-0 z-50 p-1 ">
