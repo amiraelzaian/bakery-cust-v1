@@ -9,7 +9,7 @@ export default function ProductReviews({ productId }) {
   const { data: user } = useAuth()
   const { reviews, pageInfo, isPending, error, page, setPage } = useReviews(productId)
 
-  const myReview = reviews?.find((r) => r.user?._id === user?._id)
+  const myReview = reviews?.find((r) => r.user?._id === user?.data?._id)
 
   return (
     <section className="flex flex-col gap-4  px-12">

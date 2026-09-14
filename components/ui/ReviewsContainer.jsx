@@ -16,14 +16,14 @@ export default function ReviewsContainer({ productId }) {
 
   return (
     <section className="flex flex-col gap-3">
-        <h3 className="text-secondary">Product Reviews</h3>
+        <h3 className="text-lg font-serif text-foreground mb-4">Product Reviews</h3>
       <ul>
         {reviews.map((review) => (
           <ReviewItem
             key={review._id}
             review={review}
             productId={productId}
-            isOwner={user?._id === review.user?._id}
+            isOwner={user?.data?._id === review.user?._id}
           />
         ))}
       </ul>

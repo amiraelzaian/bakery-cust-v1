@@ -10,6 +10,7 @@ import { useDeleteReview } from "@/hooks/useDeleteReview"
 const COLLAPSE_LENGTH = 160
 
 export default function ReviewItem({ review, productId, isOwner }) {
+
   const [isEditing, setIsEditing] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -105,7 +106,9 @@ export default function ReviewItem({ review, productId, isOwner }) {
   }
 
   return (
-    <>
+    <div className="">
+      
+        <p className="text-secondary text-bold text-sm">Customer. {review?.user?.name}</p>
       <li className="space-y-2 border-b border-border py-4">
         {/* Rating + Actions */}
         <div className="flex items-center justify-between">
@@ -165,7 +168,7 @@ export default function ReviewItem({ review, productId, isOwner }) {
         cancelText="Cancel"
         isLoading={isDeleting}
       />
-    </>
+    </div>
   )
 }
 
