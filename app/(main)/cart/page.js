@@ -1,3 +1,6 @@
+import CartPage from "@/components/ui/CartPage";
+
+
 export default function Cart(){
-    return <div></div>
+    return <CartPage/>
 }
