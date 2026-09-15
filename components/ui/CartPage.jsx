@@ -9,6 +9,7 @@ import EmptyCart from "@/components/ui/cart/EmptyCart"
 
 export default function CartPage() {
   const { cart, isPending, error } = useGetCart()
+  // console.log(cart)
 
   if (isPending) {
     return <p className="p-20 text-center text-muted-foreground">Loading your basket...</p>
@@ -40,7 +41,7 @@ export default function CartPage() {
       ) : (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <CartItemsList items={items} />
+            <CartItemsList items={items}  />
           </div>
           <OrderSummary cart={cart} />
         </div>

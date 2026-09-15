@@ -9,7 +9,7 @@ export default function CartItem({ item }) {
   const { updateQuantity, isPending: isUpdating } = useUpdateCartItemQuantity()
   const { removeItem, isPending: isRemoving } = useDeleteCartItem()
 
-console.log(item)
+// console.log(item)
   const { _id, productId:product, quantity, price } = item
   const unitPrice = price ?? product?.price
   const lineTotal = unitPrice * quantity
@@ -26,8 +26,8 @@ console.log(item)
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 className="font-medium text-card-foreground">{product?.name}</h3>
-            {product?.description && (
-              <p className="text-xs text-muted-foreground line-clamp-1">{product.description}</p>
+            {item?.size && (
+              <p className="text-xs text-muted-foreground line-clamp-1">{item.size}</p>
             )}
           </div>
           <div className="text-right whitespace-nowrap">
