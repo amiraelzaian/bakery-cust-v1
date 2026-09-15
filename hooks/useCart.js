@@ -81,6 +81,7 @@ export function useClearCart() {
   return { clearCart: mutation.mutate, isPending: mutation.isPending };
 }
 
+
 export function useApplyCoupon() {
   const queryClient = useQueryClient();
 

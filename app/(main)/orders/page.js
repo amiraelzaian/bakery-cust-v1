@@ -1,3 +1,5 @@
+import OrdersPage from "@/components/ui/orders/OrdersPage";
+
 export default function Orders(){
-    return <div></div>
+    return <OrdersPage/>
 }

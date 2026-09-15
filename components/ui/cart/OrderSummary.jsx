@@ -3,7 +3,7 @@
 import { useState } from "react"
 import CouponForm from "./CouponForm"
 import AddressForm from "./AddressForm"
-import { de } from "zod/locales"
+import { useCreateOrder } from "@/hooks/useOrder"
 
 const EMPTY_ADDRESS = { governorate: "", city: "", street: "", zipCode: "" }
 
@@ -11,6 +11,8 @@ export default function OrderSummary({ cart }) {
   const [deliveryMethod, setDeliveryMethod] = useState("delivery")
   const [paymentMethod, setPaymentMethod] = useState("card")
   const [deliveryAddress, setDeliveryAddress] = useState(EMPTY_ADDRESS)
+
+  const {createOrder,isPending:isCreating,isError,error}=useCreateOrder()
 
   const subtotal = cart?.totalCartPrice ?? 0
   const shipping = deliveryMethod==='delivery'?30:0
@@ -101,13 +103,18 @@ export default function OrderSummary({ cart }) {
 
       <button
         type="button"
-        // onClick={handleCheckout}
-        // disabled={!isAddressComplete || isCheckingOut}
+         onClick={()=>createOrder({deliveryMethod,paymentMethod,deliveryAddress})}
+        disabled={!isAddressComplete || isCreating}
         className="w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
       >
-        Checkout
-        {/* {isCheckingOut ? "Placing order..." : "Proceed to Checkout"} */}
+       
+        {isCreating ? "Placing order..." : "Proceed to Checkout"}
       </button>
-    </aside>
+      {isError && (
+        <p className="text-sm text-center text-destructive">
+          {error?.message}
+        </p>
+      )}  
+        </aside>
   )
 }
