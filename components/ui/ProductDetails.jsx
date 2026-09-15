@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import { useAddToCart } from "@/hooks/useCart";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 export default function ProductDetails({product,isPending,error}) {
   
+  const router=useRouter()
   const [selectedSize, setSelectedSize] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -24,8 +28,18 @@ export default function ProductDetails({product,isPending,error}) {
   const displayPrice = hasSizes ? activeSize.price : product.price;
 
   return (
-    <div className=" mx-auto px-6 pt-20 grid md:grid-cols-2 gap-10 mb-3">
+    <section className="mx-auto px-6 pt-20 flex flex-col gap-2">
+     <button
+           onClick={()=>router.back()}
+            className="flex gap-1 cursor-pointer items-center"
+          >
+            <ArrowLeft width={20} height={30} />
+            Back
+          </button>
+    <div className="  grid md:grid-cols-2 gap-10 mb-3">
       {/* Image */}
+      
+
       <div className="relative aspect-square rounded-md overflow-hidden bg-muted">
         <Image
           src={product.imageUrl || "/images/cookies.jpg"}
@@ -142,5 +156,6 @@ export default function ProductDetails({product,isPending,error}) {
     </p>        
       </div>
     </div>
+    </section>
   );
 }

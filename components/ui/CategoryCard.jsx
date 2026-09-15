@@ -27,7 +27,7 @@ export default function CategoryCard({  title, description ,image='/images/bread
         </p>
 
         <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-primary">
-          Explore
+          Explore Products
           <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
         </div>
       </div>

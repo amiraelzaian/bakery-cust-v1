@@ -1,17 +1,21 @@
 
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { useAddToCart } from "@/hooks/useCart";
+import { ShoppingCartPlus } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
+
 const router=useRouter();
+  const {addToCart}=useAddToCart()
 
   const hasSizes =
     Array.isArray(product.sizes) &&
     product.sizes.length > 0;
+
+  const activeSize = hasSizes ? product.sizes[0].name : null;
 
   const priceFrom = hasSizes
     ? Math.min(
@@ -90,7 +94,10 @@ const router=useRouter();
       {/* Content */}
       <div className="p-3">
 
-        {/* Rating */}
+        {/* Rating  Cart*/}
+      <section className="flex justify-between items-center">
+        
+
         <div className="mb-1.5 flex items-center gap-1 text-[11px]">
           <span className="text-ring">
             ★
@@ -99,9 +106,17 @@ const router=useRouter();
           <span className="font-medium text-muted-foreground">
             {product.rating ?? "4.9"}
           </span>
-
+          
         
         </div>
+         <button 
+          className="w-8 h-8 text-primary cursor-pointer active:outline-0"
+          onClick={() =>
+            addToCart({productId:product._id, size: activeSize, quantity:1 })
+          }>
+           <ShoppingCartPlus/> 
+           </button> 
+        </section>
 
         {/* Name */}
         <h2 className="line-clamp-2 text-[15px] font-medium leading-5 text-forground">
