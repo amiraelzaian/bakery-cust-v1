@@ -2,6 +2,7 @@ import Link from "next/link"
 import OrderStatusBadge from "./OrderStatusBadge"
 
 export default function OrderListItem({ order }) {
+    
   const itemCount = order.cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const firstItemName = order.cartItems[0]?.name
   const extraCount = order.cartItems.length - 1
@@ -15,7 +16,7 @@ export default function OrderListItem({ order }) {
   return (
     <Link
       href={`/orders/${order._id}`}
-      className="block rounded-md border border-border bg-card p-4 transition hover:border-primary w-full "
+      className="block rounded-md border border-border bg-card p-4 transition hover:border-primary w-full  "
     >
       <div className="flex items-start justify-between">
         <div className="flex  flex-col items-start gap-2">
@@ -34,6 +35,7 @@ export default function OrderListItem({ order }) {
           <p className="font-semibold text-card-foreground">{order.totalOrderPrice} EGP</p>
         </div>
       </div>
+      <p className="text-muted-foreground text-xs pt-2">Open to show order details </p>
     </Link>
   )
 }
