@@ -45,10 +45,9 @@ export default function CartItem({ item }) {
           />
 
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <button type="button" className="flex items-center gap-1 hover:text-foreground">
-                {/* wishlistpart */}
+            {/* <button type="button" className="flex items-center gap-1 hover:text-foreground">
               <Heart size={14} /> Save for Later
-            </button>
+            </button> */}
             <button
               type="button"
               disabled={isRemoving}
