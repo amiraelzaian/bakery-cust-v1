@@ -2,13 +2,21 @@
 
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
-import { useGetCart } from "@/hooks/useCart"
+import { useClearCart, useGetCart } from "@/hooks/useCart"
 import CartItemsList from "@/components/ui/cart/CartItemsList"
 import OrderSummary from "@/components/ui/cart/OrderSummary"
 import EmptyCart from "@/components/ui/cart/EmptyCart"
+import { useState } from "react"
+import ConfirmModal from "../ui/ConfirmModal"
 
 export default function CartPage() {
+  const[open,setOpen]=useState(false)
+
   const { cart, isPending, error } = useGetCart()
+  const {clearCart}=useClearCart({onSuccess:()=>{
+    setOpen(false)
+  }})
+
   // console.log(cart)
 
   if (isPending) {
@@ -27,7 +35,8 @@ export default function CartPage() {
         <ArrowLeft size={16} /> Continue Shopping
       </Link>
 
-      <h1 className="mb-6 text-xl font-bold text-foreground pb-3">
+      <section className="flex justify-between items-center">
+        <h1 className="mb-6 text-xl font-bold text-foreground pb-3">
         Your Basket{" "}
         {items.length > 0 && (
           <span className="text-base font-normal text-muted-foreground">
@@ -35,6 +44,23 @@ export default function CartPage() {
           </span>
         )}
       </h1>
+        {items.length !== 0 && (
+          <button
+            className="text-red-800 text-sm cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            Clear cart
+          </button>
+        )}
+      </section>
+      {
+        open&&<ConfirmModal 
+        open={open} 
+        onClose={()=>setOpen(false)} 
+        onConfirm={clearCart} 
+        title = "Are you sure you clear your cart ?"
+        description = "This action cannot be undone."/>
+      }
 
       {items.length === 0 ? (
         <EmptyCart />
