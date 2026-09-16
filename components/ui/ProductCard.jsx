@@ -2,13 +2,36 @@
 "use client";
 
 import { useAddToCart } from "@/hooks/useCart";
+import { useAddToWishlist, useGetWishlist, useRemoveWishlistItem } from "@/hooks/useWishlist";
 import { ShoppingCartPlus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
+const { wishlist } = useGetWishlist()
+  const { addToWishlist, isPending: isAdding } = useAddToWishlist()
+  const { removeItem, isPending: isRemoving } = useRemoveWishlistItem()
 
-const router=useRouter();
+
+
+const wishlistItem = (wishlist ?? []).find(
+  (item) => item.product?._id === product?._id
+)
+const isSaved = Boolean(wishlistItem)
+
+  console.log('saved',isSaved)
+  const isBusy = isAdding || isRemoving
+
+  function handleToggle() {
+    if (isSaved) {
+      removeItem(wishlistItem?.product?._id)
+
+    } else {
+      addToWishlist({ productId: product?._id })
+    }
+  }
+  
+  const router=useRouter();
   const {addToCart}=useAddToCart()
 
   const hasSizes =
@@ -68,19 +91,27 @@ const router=useRouter();
           </span>
         )}
 
-        {/* Favorite */}
+      {/* Favorite */}
         <button
+          onClick={handleToggle}
+          disabled={isBusy}
           type="button"
-          aria-label={`Add ${product.name} to favorites`}
-          className="absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-primary shadow-sm backdrop-blur transition  hover:ring"
+          aria-label={
+            isSaved
+              ? `Remove ${product.name} from favorites`
+              : `Add ${product.name} to favorites`
+          }
+          aria-pressed={isSaved}
+          className="cursor-pointer absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur transition hover:ring disabled:cursor-not-allowed disabled:opacity-60"
         >
           <svg
             width="17"
             height="17"
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
+            fill={isSaved ? "#dc2626" : "none"}
+            stroke={isSaved ? "#dc2626" : "currentColor"}
             strokeWidth="1.8"
+            className="text-primary transition-colors"
           >
             <path
               d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
