@@ -1,6 +1,6 @@
 "use client";
 
-import { useForgotPassword } from "@/hooks/useForgotPassword";
+import { useForgotPassword } from "@/hooks/useAuth";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useLogin } from "@/hooks/useLogin";
 import { GoogleLogin } from "@react-oauth/google";
