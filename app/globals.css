@@ -32,6 +32,9 @@
   --border: #ded2c4;
   --input: #fffaf2;
   --ring: #c85a32;
+
+   --brand-panel: #241611;
+  --brand-panel-deep: #1d1410;
 }
 
 .dark {
@@ -82,6 +85,10 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-brand-panel: var(--brand-panel);
+  --color-brand-panel-deep: var(--brand-panel-deep);
+
 }
 
 body {

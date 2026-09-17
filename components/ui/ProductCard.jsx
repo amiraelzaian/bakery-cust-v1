@@ -6,12 +6,19 @@ import { useAddToWishlist, useGetWishlist, useRemoveWishlistItem } from "@/hooks
 import { ShoppingCartPlus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ProductCard({ product }) {
 const { wishlist } = useGetWishlist()
   const { addToWishlist, isPending: isAdding } = useAddToWishlist()
   const { removeItem, isPending: isRemoving } = useRemoveWishlistItem()
 
+  const [logged,setLogged]=useState(false)
+
+ useEffect(() => {
+  setLogged(localStorage.getItem('token') ? true : false)
+}, [])
+  
 
 
 const wishlistItem = (wishlist ?? []).find(
@@ -92,7 +99,7 @@ const isSaved = Boolean(wishlistItem)
         )}
 
       {/* Favorite */}
-        <button
+       {logged&& <button
           onClick={handleToggle}
           disabled={isBusy}
           type="button"
@@ -119,7 +126,7 @@ const isSaved = Boolean(wishlistItem)
               strokeLinejoin="round"
             />
           </svg>
-        </button>
+        </button>}
       </div>
 
       {/* Content */}
