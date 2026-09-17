@@ -12,6 +12,9 @@ export function useGoogleAuth() {
     mutationFn: (credential) => googleLogin(credential),
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
+       document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax${
+        process.env.NODE_ENV === "production" ? "; Secure" : ""
+      }`;
       const redirect = searchParams.get("redirect");
       router.push(redirect || "/");
     },

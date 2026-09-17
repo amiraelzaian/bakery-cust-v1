@@ -8,12 +8,12 @@ export default function OrdersPage() {
   
 
   if (isPending) {
-    return <p className="p-8 text-center text-muted-foreground">Loading your orders...</p>
+    return <p className="p-40 text-center text-muted-foreground">Loading your orders...</p>
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-md py-16 text-center ">
+      <div className="p-40 text-center text-muted-foreground">
         <p className="text-lg font-medium text-foreground">No orders yet</p>
         <p className="text-sm text-muted-foreground">
           {error.message || "Start ordering to see your history here."}
