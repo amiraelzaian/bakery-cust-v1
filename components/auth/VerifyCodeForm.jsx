@@ -1,11 +1,36 @@
 "use client";
 
+import { Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
+import { useVerifyCode, useForgotPassword } from "@/hooks/useAuth";
 
-export default function VerifyCodeForm({ onSubmit, isLoading, error, onResend, isResending }) {
+export default function VerifyCodeForm() {
+  return (
+    <Suspense fallback={<VerifyCodeFormSkeleton />}>
+      <VerifyCodeFormInner />
+    </Suspense>
+  );
+}
+
+function VerifyCodeFormSkeleton() {
+  return (
+    <div className="w-full max-w-sm mx-auto animate-pulse">
+      <div className="h-3 w-24 rounded bg-[#E4D9CB]" />
+      <div className="mt-3 h-8 w-64 rounded bg-[#E4D9CB]" />
+      <div className="mt-3 h-4 w-full rounded bg-[#E4D9CB]" />
+      <div className="mt-6 h-11 w-full rounded-md bg-[#E4D9CB]" />
+      <div className="mt-4 h-11 w-full rounded-md bg-[#E4D9CB]" />
+    </div>
+  );
+}
+
+function VerifyCodeFormInner() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+
+  const { verifyCode, isPending: isLoading, error } = useVerifyCode();
+  const { forgotPassword, isPending: isResending } = useForgotPassword();
 
   const {
     register,
@@ -16,8 +41,13 @@ export default function VerifyCodeForm({ onSubmit, isLoading, error, onResend, i
   });
 
   const submitHandler = (data) => {
-    onSubmit?.({ ...data, email });
+    verifyCode({ email, resetCode: data.code });
   };
+
+  function handleResend() {
+    if (!email) return;
+    forgotPassword({ email });
+  }
 
   return (
     <div className="w-full max-w-sm mx-auto">
@@ -31,7 +61,7 @@ export default function VerifyCodeForm({ onSubmit, isLoading, error, onResend, i
 
       {error && (
         <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2 mt-4">
-          {error}
+          {error.message}
         </p>
       )}
 
@@ -72,7 +102,7 @@ export default function VerifyCodeForm({ onSubmit, isLoading, error, onResend, i
         Didn&apos;t get a code?{" "}
         <button
           type="button"
-          onClick={() => onResend?.(email)}
+          onClick={handleResend}
           disabled={isResending}
           className="text-[#B8734A] font-medium hover:underline disabled:opacity-50"
         >

@@ -1,6 +1,6 @@
 'use client'
 
-import { getLoggedUser, updateProfile,forgotPassword, changeUserPassword } from "@/lib/api/user";
+import { getLoggedUser, updateProfile,forgotPassword, changeUserPassword, verifyCode } from "@/lib/api/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -40,15 +40,16 @@ export function useUpdateProfile() {
 }
 
 
+
 export function useForgotPassword() {
   const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: ({ email }) => forgotPassword(email),
     onSuccess: (data, variables) => {
-  console.log("forgotPassword success:", data, variables);
-  router.push(`/verifyCode?email=${encodeURIComponent(variables.email)}`);
-},
+      console.log("forgotPassword success:", data, variables);
+      router.push(`/verifyCode?email=${encodeURIComponent(variables.email)}`);
+    },
   });
 
   return {
@@ -57,6 +58,41 @@ export function useForgotPassword() {
     error: mutation.error,
   };
 }
+
+export function useVerifyCode() {
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: ({ email, resetCode }) => verifyCode(email, resetCode),
+    onSuccess: (data, variables) => {
+      router.push(`/resetPassword?email=${encodeURIComponent(variables.email)}`);
+    },
+  });
+
+  return {
+    verifyCode: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+  };
+}
+
+export function useResetPassword() {
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: ({ email, newPassword }) => resetCode(email, newPassword),
+    onSuccess: (data, variables) => {
+      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
+    },
+  });
+
+  return {
+    resetNewPassword: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+  };
+}
+
 export function useChangeUserPassword() {
   const mutation = useMutation({
     mutationFn: ({ userId, currentPassword, password, passwordConfirm }) =>

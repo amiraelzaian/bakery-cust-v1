@@ -14,7 +14,7 @@ export default function BrandPanel() {
       />
 
       {/* Dark warm overlay — strong enough for full text legibility */}
-      <div className="absolute inset-0 bg-brand-panel/90" />
+      <div className="absolute inset-0 bg-brand-panel/50" />
 
       {/* Subtle gradient for extra depth top/bottom */}
       <div className="absolute inset-0 bg-gradient-to-t from-brand-panel-deep via-brand-panel/80 to-brand-panel/85" />
