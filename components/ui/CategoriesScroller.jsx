@@ -81,7 +81,7 @@ export default function CategoriesScroller() {
             className="w-[280px] min-w-[280px] shrink-0 sm:w-[320px] sm:min-w-[320px]"
           >
             <CategoryCard
-              image={category.image}
+              image={category.imageUrl}
               title={category.name}
               description={category.description}
             />

@@ -21,19 +21,19 @@ import CallBtn from "@/components/ui/CallBtn";
 import Header from "@/components/layout/Header";
 
 export const metadata = {
-  title: "CREME & CRUMB | Freshly Baked With Love",
+  title: "GOLDEN CRUMBS | Freshly Baked With Love",
   description:
-    "Explore CREME & CRUMB for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
+    "Explore GOLDEN CRUMBS for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
   openGraph: {
-    title: "CREME & CRUMB | Freshly Baked With Love",
+    title: "GOLDEN CRUMBS | Freshly Baked With Love",
     description:
       "Artisan breads, cakes, pastries, and sweet treats freshly baked for you.",
     images: [
       {
-        url: "/images/breadcoffe2.jpg",
+        url: "/images/bread2.jpg",
         width: 1200,
         height: 630,
-        alt: "CREME & CRUMB bakery",
+        alt: "GOLDEN CRUMBS bakery",
       },
     ],
   },
@@ -47,7 +47,7 @@ export default function Home() {
       <section
         className="relative min-h-[650px] w-full bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/images/breadcoffe2.jpg')",
+          backgroundImage: "url('/images/background.jpg')",
         }}
       >
         <div className="absolute inset-0 bg-black/45" />
@@ -77,15 +77,15 @@ export default function Home() {
   <div className="grid w-full  grid-cols-1 gap-3 sm:grid-cols-3">
     <MainButton
       path="/cart"
-      className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-white"
+      className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-primary/60 py-3 text-white  "
     >
       Order Now
-      <ArrowRight className="h-5 w-5" />
+      <ArrowRight className="h-5 w-5  " />
     </MainButton>
 
     <MainButton
       path="/explore"
-      className="flex  col-span-1  items-center justify-center rounded-xl bg-white py-3 text-primary hover:bg-white/90"
+      className="flex  col-span-1  items-center justify-center rounded-xl bg-white/90 py-3 text-primary hover:bg-white/90"
     >
       Explore Categories
     </MainButton>
