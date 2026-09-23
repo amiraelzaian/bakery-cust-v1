@@ -11,7 +11,7 @@ function PaymentStatus() {
   const isSuccess = paymentStatus === "SUCCESS"
 
   return (
-    <section className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 px-4 py-20 text-center">
+    <section style={{"margin":"100px auto"}} className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 px-4 py-20 text-center">
       {isSuccess ? (
         <>
           <CheckCircle className="text-primary" size={48} />
