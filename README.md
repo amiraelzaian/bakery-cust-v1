@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Golden Crumbs — Customer App (`bakery-cust-v1`)
+
+The customer-facing storefront for Golden Crumbs Bakery. Built with Next.js (App Router) and React 19. Customers can browse products, manage a cart and wishlist, check out with cash or card (Kashier), track orders, and chat with an AI assistant.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **UI:** React 19, Tailwind CSS 4, shadcn/ui, `next-themes` (light/dark mode)
+- **Data & forms:** TanStack Query, React Hook Form + `@hookform/resolvers`
+- **Auth:** Google OAuth (`@react-oauth/google`)
+- **Payments:** Kashier (hosted checkout sessions + webhook)
+- **Charts:** Recharts
+- **Notifications:** Sonner (toasts)
+- **Icons:** Lucide
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A running instance of the [BakeryApi backend](https://github.com/amiraelzaian/BakeryApi)
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_API_URL=https://bakeryapi-production.up.railway.app/api/v1
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Build & Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Linting
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  (main)/          # Storefront routes (home, explore, product pages, etc.)
+  login/
+  register/
+  resetPassword/
+  verifyCode/
+  layout.js         # Root layout — metadata, fonts, providers
+  page.js
+components/
+  ui/                # Logo, ThemeProvider, shadcn primitives
+  layout/            # Header, ScrollToTop, footer, etc.
+  providers/         # QueryProvider, GoogleAuthProvider, AppProviders
+lib/
+  fonts.js           # Shared Next/font instances
+services/            # API calls (orders, products, cart, wishlist, auth, etc.)
+hooks/                # React Query hooks wrapping services
+stores/               # Zustand or context-based client state (cart, etc.)
+public/               # Static assets, favicons, images
+```
 
-## Deploy on Vercel
+## Key Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Product browsing & search** — categories, seasonal offers, product details, reviews
+- **Cart & wishlist** — persistent per-user cart, add/remove/update quantities
+- **Checkout** — cash on delivery/pickup, or card payment via Kashier hosted checkout
+- **Order tracking** — order history, order details, live status (pending → accepted → preparing → ready → out for delivery/picked up → delivered)
+- **Account management** — profile info, address, password change
+- **AI Assistant** — [describe what this does — product recommendations? order help?]
+- **Theming** — light/dark mode via `next-themes`
+- **Toasts** — user feedback via Sonner on every mutation (add to cart, place order, etc.)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Payments (Kashier)
+
+Card payments go through Kashier's hosted checkout:
+1. Customer selects "Pay by card" at checkout.
+2. Backend creates a Kashier payment session and returns a `paymentUrl`.
+3. Customer is redirected to Kashier to complete payment.
+4. Kashier redirects back to `/orders/payment-status` and also fires a server-side webhook that creates the actual order once payment is confirmed.
+
+> Payment session creation requires `KASHIER_MERCHANT_ID`, `KASHIER_SECRET_KEY`, `KASHIER_PAYMENT_API_KEY`, `FRONT_URL`, and `APP_BASE_URL` to be set **on the backend** ([BakeryApi](https://github.com/amiraelzaian/BakeryApi)) — this frontend only initiates checkout and displays the resulting status.
+
+## Deployment
+
+Deployed on Vercel. Push to `main` triggers a deployment. Set the same environment variables in the Vercel project settings as in `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=https://bakeryapi-production.up.railway.app/api/v1
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id
+```
+
+Backend API: [BakeryApi](https://github.com/amiraelzaian/BakeryApi) — deployed on Railway.
+

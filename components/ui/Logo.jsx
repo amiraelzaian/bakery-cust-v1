@@ -1,6 +1,6 @@
 "use client";
 
-import { loversQuarrel } from "@/app/layout";
+import { loversQuarrel } from "@/lib/fonts";
 import Image from "next/image";
 import Link from "next/link";
 

@@ -1,39 +1,30 @@
 import "./globals.css";
-import ThemeProvider from "@/components/ui/ThemeProvider";
-import QueryProvider from "@/components/providers/QueryProvider";
 import { Lovers_Quarrel } from "next/font/google";
-import GoogleAuthProvider from "@/components/providers/GoogleProvider";
-import { Toaster } from "sonner";
-import ScrollToTop from "@/components/layout/ScrollToTop";
+import AppProviders from "@/components/providers/AppProviders";
 
 export const loversQuarrel = Lovers_Quarrel({
   weight: "400",
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "Golden Crumbs",
+  description: "Fresh baked goods, delivered.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon0.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="custom-scrollbar">
       <body>
-        <QueryProvider>
-          <GoogleAuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
-              <ScrollToTop />
-              <Toaster
-                richColors
-                position="top-center"
-                toastOptions={{
-                  classNames: {
-                    toast: "bg-card! text-card-foreground! border-border! shadow-lg!",
-                    title: "text-foreground!",
-                    description: "text-muted-foreground!",
-                  },
-                }}
-              />
-            </ThemeProvider>
-          </GoogleAuthProvider>
-        </QueryProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
