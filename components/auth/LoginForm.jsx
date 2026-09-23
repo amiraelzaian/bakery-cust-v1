@@ -1,23 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useForgotPassword } from "@/hooks/useAuth";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useLogin } from "@/hooks/useLogin";
 import { GoogleLogin } from "@react-oauth/google";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
-  const {
-    login: onSubmit,
-    isLoading,
-    error,
-  } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    loginWithGoogle,
-    error: googleError,
-  } = useGoogleAuth();
+  const { login: onSubmit, isLoading, error } = useLogin();
+
+  const { loginWithGoogle, error: googleError } = useGoogleAuth();
 
   const {
     forgotPassword,
@@ -108,7 +105,6 @@ export default function LoginForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-5 flex flex-col gap-3"
         noValidate
-      
       >
         {/* Email */}
         <div>
@@ -169,24 +165,35 @@ export default function LoginForm() {
             </button>
           </div>
 
-          <input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            autoComplete="current-password"
-            {...register("password", {
-              required: "Password is required",
-            })}
-            className={`h-12 w-full rounded-xl border bg-input px-4 text-sm text-foreground
-              placeholder:text-muted-foreground/50
-              transition-all duration-200
-              focus:outline-none focus:ring-2 focus:ring-ring/20
-              ${
-                errors.password
-                  ? "border-red-400"
-                  : "border-border focus:border-ring"
-              }`}
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              {...register("password", {
+                required: "Password is required",
+              })}
+              className={`h-12 w-full rounded-xl border bg-input px-4 pr-11 text-sm text-foreground
+                placeholder:text-muted-foreground/50
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-ring/20
+                ${
+                  errors.password
+                    ? "border-red-400"
+                    : "border-border focus:border-ring"
+                }`}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
 
           {errors.password && (
             <p className="mt-1.5 text-xs text-red-600">
@@ -212,9 +219,7 @@ export default function LoginForm() {
             hover:brightness-105
             disabled:pointer-events-none disabled:opacity-60"
         >
-          <span>
-            {isLoading ? "Signing in..." : "Sign in to account"}
-          </span>
+          <span>{isLoading ? "Signing in..." : "Sign in to account"}</span>
 
           {!isLoading && (
             <span className="transition-transform duration-200 group-hover:translate-x-1">

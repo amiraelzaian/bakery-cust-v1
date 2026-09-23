@@ -262,12 +262,14 @@ export default function Home() {
 
           <form className="mx-auto mt-7 flex max-w-lg flex-col gap-3 sm:flex-row " >
             <input
+             suppressHydrationWarning
               type="email"
               placeholder="Your email address"
               className="min-h-12 flex-1 rounded-xl border border-border bg-background px-4 outline-none transition focus:border-primary"
             />
 
             <button
+             suppressHydrationWarning
               type="submit"
               className="cursor-pointer  min-h-12 rounded-xl bg-primary px-6 font-semibold text-white transition hover:opacity-90"
             >
@@ -297,26 +299,26 @@ export default function Home() {
             <h3 className="font-semibold">Shop</h3>
 
             <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <a href="/shop" className="block transition hover:text-primary">
+              <a href="#" className="block transition hover:text-primary">
                 All Products
               </a>
 
               <a
-                href="/categories"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 Categories
               </a>
 
               <a
-                href="/cakes"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 Cakes
               </a>
 
               <a
-                href="/pastries"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 Pastries
@@ -329,26 +331,26 @@ export default function Home() {
             <h3 className="font-semibold">Company</h3>
 
             <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <a href="/about" className="block transition hover:text-primary">
+              <a href="#" className="block transition hover:text-primary">
                 About us
               </a>
 
               <a
-                href="/contact"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 Contact
               </a>
 
               <a
-                href="/delivery"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 Delivery
               </a>
 
               <a
-                href="/faq"
+                href="#"
                 className="block transition hover:text-primary"
               >
                 FAQ
@@ -363,12 +365,12 @@ export default function Home() {
             <div className="mt-4 space-y-4 text-sm text-muted-foreground">
               <div className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>123 Bakery Street, Your City</span>
+                <span>123 Bakery Street, KaferElsheikh</span>
               </div>
 
               <div className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>+1 234 567 890</span>
+                <span>+20 1005707613</span>
               </div>
 
               <div className="flex gap-3">
