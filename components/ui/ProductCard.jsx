@@ -26,7 +26,6 @@ const wishlistItem = (wishlist ?? []).find(
 )
 const isSaved = Boolean(wishlistItem)
 
-  console.log('saved',isSaved)
   const isBusy = isAdding || isRemoving
 
   function handleToggle() {
@@ -78,6 +77,7 @@ const isSaved = Boolean(wishlistItem)
             src={product.imageUrl}
             alt={product.name}
             fill
+            
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

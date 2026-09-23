@@ -7,7 +7,6 @@ import EmptyWishlist from "@/components/ui/wishlist/EmptyWishlist"
 
 export default function WishlistPage() {
   const { wishlist, isPending, error } = useGetWishlist()
-  console.log(wishlist)
 
   if (isPending) {
     return (
@@ -33,7 +32,7 @@ export default function WishlistPage() {
   }
 
   const items = wishlist ?? []
-    console.log("items",items);
+  
 
 
   return (
