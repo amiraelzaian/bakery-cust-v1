@@ -1,5 +1,11 @@
 import ExploreMenu from "@/components/ui/ExloreMenu";
 import { Suspense } from "react";
+export const metadata = {
+  title: "GOLDEN CRUMBS | Products",
+  description:
+    "Explore GOLDEN CRUMBS for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
+
+};
 
 export default function Explore() {
   return (

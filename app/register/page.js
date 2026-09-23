@@ -1,6 +1,13 @@
 import BrandPanel from "@/components/auth/BrandPanel";
 import RegisterForm from "@/components/auth/RegisterForm";
 
+export const metadata = {
+  title: "GOLDEN CRUMBS | Register",
+  description:
+    "Explore GOLDEN CRUMBS for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
+
+};
+
 export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-background">
