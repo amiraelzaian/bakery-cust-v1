@@ -12,6 +12,7 @@ The customer-facing storefront for Golden Crumbs Bakery. Built with Next.js (App
 - **Charts:** Recharts
 - **Notifications:** Sonner (toasts)
 - **Icons:** Lucide
+- **Zustand**
 
 ## Getting Started
 
