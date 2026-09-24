@@ -9,10 +9,11 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useGetWishlist() {
+export function useGetWishlist({ enabled = true } = {}) {
   const query = useQuery({
     queryKey: ["wishlist"],
     queryFn: getWishlist,
+    enabled,
     retry: (failureCount, error) => {
       if (error?.response?.status === 404) return false;
       return failureCount < 3;
@@ -29,7 +30,10 @@ export function useGetWishlist() {
     };
   }
 
-  return { wishlist: query.data?.data ?? [], ...query };
+  return {
+    wishlist: query.data?.data ?? [],
+    ...query,
+  };
 }
 
 export function useAddToWishlist() {

@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { useGetCart } from "@/hooks/useCart";
 import { useGetWishlist } from "@/hooks/useWishlist";
 import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/authStore";
 
 const NAV_LINKS_LOGGED = [
   { href: "/orders", label: "Orders" },
@@ -25,10 +26,11 @@ const NAV_LINKS_NOT_LOGGED = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+const { isLoading: authLoading } = useAuth();
 
-  const { data, isLoading: authLoading } = useAuth();
-  const user = data?.data;
-  const isLoggedIn = Boolean(user);
+const user = useAuthStore((state) => state.user);
+const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+const isHydrated = useAuthStore((state) => state.isHydrated);
 
   const NAV_LINKS = isLoggedIn ? NAV_LINKS_LOGGED : NAV_LINKS_NOT_LOGGED;
 
@@ -63,7 +65,7 @@ export default function Header() {
             </Link>
           ))}
 
-          {!authLoading && !isLoggedIn && (
+          { isHydrated&& !isLoggedIn && (
             <Link
               href="/login"
               className="rounded-md p-1 bg-secondary text-white hover:bg-secondary/90"
@@ -167,7 +169,7 @@ export default function Header() {
               </>
             )}
 
-            {!authLoading && !isLoggedIn && (
+            {isHydrated && !isLoggedIn && (
               <Link
                 href="/login"
                 className="rounded-md p-2 hover:bg-muted"

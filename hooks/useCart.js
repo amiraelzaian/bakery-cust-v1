@@ -26,18 +26,17 @@ export function useAddToCart() {
   return { addToCart: mutation.mutate, ...mutation };
 }
 
-export function useGetCart() {
+export function useGetCart({ enabled = true } = {}) {
   const query = useQuery({
     queryKey: ["cart"],
     queryFn: getCart,
+    enabled,
     retry: (failureCount, error) => {
-      // 404 means "no cart yet" — not worth retrying
-      if (error?.response?.status === 404) return false
-      return failureCount < 3
+      if (error?.response?.status === 404) return false;
+      return failureCount < 3;
     },
   });
 
-  // Treat 404 (no cart) or missing data as an empty cart, not an error
   if (query.error?.response?.status === 404 || query.data === undefined) {
     return {
       cart: { cartItems: [] },
@@ -48,9 +47,11 @@ export function useGetCart() {
     };
   }
 
-  return { cart: query.data?.data, ...query };
+  return {
+    cart: query.data?.data,
+    ...query,
+  };
 }
-
 export function useUpdateCartItemQuantity() {
   const queryClient = useQueryClient();
 
