@@ -111,3 +111,5 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id
 
 Backend API: [BakeryApi](https://github.com/amiraelzaian/BakeryApi) — deployed on Railway.
 
+Frontend Demo: [GOLDEN CRUMBS](https://golen-crumbs-bakery.vercel.app/) — deployed on Railway.
+
