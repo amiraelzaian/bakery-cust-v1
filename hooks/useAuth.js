@@ -6,7 +6,7 @@ import {
   forgotPassword,
   changeUserPassword,
   verifyCode,
-//  resetPassword, // adjust to your real API function name
+//  resetPassword, // adjust soon
 } from "@/lib/api/user";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
