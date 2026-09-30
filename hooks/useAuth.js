@@ -121,22 +121,22 @@ export function useVerifyCode() {
   };
 }
 
-// export function useResetPassword() {
-//   const router = useRouter();
+export function useResetPassword() {
+  const router = useRouter();
 
-//   const mutation = useMutation({
-//     mutationFn: ({ email, newPassword }) => resetPass(email, newPassword),
-//     onSuccess: (data, variables) => {
-//       router.push(`/login?email=${encodeURIComponent(variables.email)}`);
-//     },
-//   });
+  const mutation = useMutation({
+    mutationFn: ({ email, newPassword }) => resetPass(email, newPassword),
+    onSuccess: (data, variables) => {
+      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
+    },
+  });
 
-//   return {
-//     resetNewPassword: mutation.mutate,
-//     isPending: mutation.isPending,
-//     error: mutation.error,
-//   };
-// }
+  return {
+    resetNewPassword: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+  };
+}
 
 export function useChangeUserPassword() {
   const mutation = useMutation({
