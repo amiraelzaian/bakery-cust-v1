@@ -1,14 +1,15 @@
-export const metadata = {
-  title: "GOLDEN CRUMBS | AI-Assistant",
-  description:
-    "Explore GOLDEN CRUMBS for freshly baked artisan breads, pastries, cakes, and delicious sweet treats made with love.",
+import AssistantChat from "@/components/assistant/AssistantChat";
 
+export const metadata = {
+  title: "GOLDEN CRUMBS | AI Assistant",
+  description:
+    "Chat with the Golden Crumbs assistant to find products, manage your cart and wishlist, and place orders.",
 };
 
-export default function Assistant() {
+export default function AssistantPage() {
   return (
-    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-medium text-muted-foreground">
-      Coming soon
-    </div>
-  )
+    <section className="mx-auto h-screen w-full overflow-hidden  pt-15">
+      <AssistantChat />
+    </section>
+  );
 }
