@@ -3,39 +3,30 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { login } from "@/lib/api/login";
+import { saveSession, getSafeRedirect } from "@/lib/session";
 import { useAuthStore } from "@/stores/authStore";
 
 export function useLogin() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-
-  const storeLogin = useAuthStore((state) => state.login);
-  const setHydrated = useAuthStore((state) => state.setHydrated);
+  const storeLogin = useAuthStore((s) => s.login);
 
   const mutation = useMutation({
     mutationFn: ({ email, password }) => login(email, password),
 
     onSuccess: (data) => {
-      localStorage.setItem("token", data.token);
+      const user = data.data; // backend: { status, data: user, token }
 
-      document.cookie = `token=${data.token}; path=/; max-age=${
-        60 * 60 * 24 * 7
-      }; SameSite=Lax${
-        process.env.NODE_ENV === "production" ? "; Secure" : ""
-      }`;
+      saveSession(data.token);          // 1. cookie + localStorage first
+      storeLogin(user, data.token);     // 2. store: header updates immediately
+      queryClient.setQueryData(["loggedUser"], { data: user }); // 3. no flicker
 
-      // Seed the cache so useAuth doesn't flash empty, then refetch to confirm.
-      if (data.user) {
-        queryClient.setQueryData(["loggedUser"], { data: data.user });
-      }
-      queryClient.invalidateQueries({ queryKey: ["loggedUser"] });
-
-      storeLogin(data.user ?? null);
-      setHydrated(true);
-
-      const callbackUrl = searchParams.get("callbackUrl");
-      router.replace(callbackUrl || "/");
+      const target = getSafeRedirect(
+        searchParams.get("callbackUrl") || searchParams.get("redirect"),
+      );
+      router.replace(target);           // 4. navigate
+      router.refresh();                 // 5. re-run middleware with the new cookie
     },
   });
 

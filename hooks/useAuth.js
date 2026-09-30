@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -6,70 +7,78 @@ import {
   forgotPassword,
   changeUserPassword,
   verifyCode,
-//  resetPassword, // adjust soon
+  resetPassword, // uncommented
 } from "@/lib/api/user";
+import { clearSession } from "@/lib/session";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-function clearSession() {
-  localStorage.removeItem("token");
-  document.cookie = "token=; path=/; max-age=0; SameSite=Lax";
-}
-
 export function useAuth() {
-  const hasToken =
-    typeof window !== "undefined" && Boolean(localStorage.getItem("token"));
-
+  const queryClient = useQueryClient();
+  const token = useAuthStore((s) => s.token);
+  const init = useAuthStore((s) => s.init);
   const setUser = useAuthStore((s) => s.setUser);
+  const logout = useAuthStore((s) => s.logout);
   const setHydrated = useAuthStore((s) => s.setHydrated);
+
+  // read the saved token once, after mount
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const query = useQuery({
     queryKey: ["loggedUser"],
     queryFn: getLoggedUser,
-    enabled: hasToken,
+    enabled: Boolean(token),
     retry: false,
   });
 
   useEffect(() => {
-    // No token: we know the user is logged out, so we're hydrated.
-    if (!hasToken) {
-      setUser(null);
-      setHydrated(true);
-      return;
-    }
+    if (!token) return
 
     if (query.isSuccess) {
       setUser(query.data?.data ?? null);
-      setHydrated(true);
       return;
     }
 
     if (query.isError) {
-      const status = query.error?.response?.status;
+     
+      const status = query.error?.res?.status ?? query.error?.response?.status;
 
-      // Invalid/expired token: clear BOTH token copies so the middleware and the client agree.
       if (status === 401 || status === 403) {
         clearSession();
-        setUser(null);
+        queryClient.removeQueries({ queryKey: ["loggedUser"] });
+        logout();
+      } else {
+       
+        setHydrated(true);
       }
-      setHydrated(true);
     }
-  }, [
-    hasToken,
-    query.isSuccess,
-    query.isError,
-    query.error,
-    query.data,
-    setUser,
-    setHydrated,
-  ]);
+  }, [token, query.isSuccess, query.isError, query.data, query.error,
+      setUser, logout, setHydrated, queryClient]);
 
   return query;
 }
 
+export function useResetPassword() {
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: ({ email, newPassword }) => resetPassword(email, newPassword),
+    onSuccess: (data, variables) => {
+      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
+    },
+  });
+
+  return {
+    resetNewPassword: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+  };
+}
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
@@ -121,22 +130,7 @@ export function useVerifyCode() {
   };
 }
 
-export function useResetPassword() {
-  const router = useRouter();
 
-  const mutation = useMutation({
-    mutationFn: ({ email, newPassword }) => resetPass(email, newPassword),
-    onSuccess: (data, variables) => {
-      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
-    },
-  });
-
-  return {
-    resetNewPassword: mutation.mutate,
-    isPending: mutation.isPending,
-    error: mutation.error,
-  };
-}
 
 export function useChangeUserPassword() {
   const mutation = useMutation({

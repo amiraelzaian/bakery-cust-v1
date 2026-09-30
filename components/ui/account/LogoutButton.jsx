@@ -1,38 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function LogoutButton() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  const logout = useAuthStore((state) => state.logout);
-
-  function handleLogout() {
-    localStorage.removeItem("token");
-
-    document.cookie =
-      "token=; path=/; max-age=0; SameSite=Lax";
-
-    logout();
-
-    queryClient.removeQueries({
-      queryKey: ["loggedUser"],
-    });
-
-    queryClient.removeQueries({
-      queryKey: ["cart"],
-    });
-
-    queryClient.removeQueries({
-      queryKey: ["wishlist"],
-    });
-
-    router.replace("/login");
-  }
+  const handleLogout = useLogout();
 
   return (
     <button
