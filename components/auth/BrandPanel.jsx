@@ -81,7 +81,7 @@ export default function BrandPanel() {
             routine completely.&rdquo;
           </p>
           <p className={`mt-3 text-xs ${TEXT} opacity-60`}>
-            — Camille Laurent, Bakery Club Member
+            — Amira Mohammed, Bakery Club Member
           </p>
         </div>
       </div>
