@@ -63,22 +63,7 @@ export function useAuth() {
   return query;
 }
 
-export function useResetPassword() {
-  const router = useRouter();
 
-  const mutation = useMutation({
-    mutationFn: ({ email, newPassword }) => resetPassword(email, newPassword),
-    onSuccess: (data, variables) => {
-      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
-    },
-  });
-
-  return {
-    resetNewPassword: mutation.mutate,
-    isPending: mutation.isPending,
-    error: mutation.error,
-  };
-}
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
@@ -125,6 +110,23 @@ export function useVerifyCode() {
 
   return {
     verifyCode: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+  };
+}
+
+export function useResetPassword() {
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: ({ email, newPassword }) => resetPassword(email, newPassword),
+    onSuccess: (data, variables) => {
+      router.push(`/login?email=${encodeURIComponent(variables.email)}`);
+    },
+  });
+
+  return {
+    resetNewPassword: mutation.mutate,
     isPending: mutation.isPending,
     error: mutation.error,
   };

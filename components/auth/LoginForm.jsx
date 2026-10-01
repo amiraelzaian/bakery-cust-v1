@@ -155,14 +155,14 @@ export default function LoginForm() {
               Password
             </label>
 
-            <button
+            {/* <button
               type="button"
               onClick={handleForgotPassword}
               disabled={isSendingCode}
               className="text-xs font-medium text-primary transition-colors hover:text-primary/70 disabled:opacity-50"
             >
               {isSendingCode ? "Sending..." : "Forgot password?"}
-            </button>
+            </button> */}
           </div>
 
           <div className="relative">
