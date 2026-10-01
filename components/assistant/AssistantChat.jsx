@@ -9,7 +9,7 @@ import AssistantInput from "./AssistantInput";
 import TypingIndicator from "./TypingIndicator";
 
 const STORAGE_KEY = "golden-crumbs-assistant";
-const MAX_HISTORY = 20;
+const MAX_HISTORY = 30;
 
 const SUGGESTIONS = [
   { icon: "🍰", label: "Browse products", text: "What products do you have?" },
@@ -126,11 +126,11 @@ export default function AssistantChat() {
               New chat
             </button>
           )}
-          <Sparkles size={20} className="text-secondary" />
+         
         </div>
       </div>
 
-      {/* Messages (the only part that scrolls) */}
+            {/* messagess */}
       <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-5">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-6 text-center">
@@ -148,7 +148,7 @@ export default function AssistantChat() {
                   key={s.label}
                   type="button"
                   onClick={() => handleSend(s.text)}
-                  className="rounded-xl border border-border bg-background px-4 py-3 text-left text-sm transition hover:border-primary hover:bg-primary/5"
+                  className="cursor-pointer rounded-xl border border-border bg-background px-4 py-3 text-left text-sm transition hover:border-primary hover:bg-primary/5"
                 >
                   {s.icon} {s.label}
                 </button>
